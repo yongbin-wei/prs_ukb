@@ -1,6 +1,9 @@
 # prs_ukb
 This project computes PRS based on UKB subjects
 
+"main.sh"
+-- main pipeline including all necessary steps
+
 "downloads.sh"
 -- downloads GWAS summary statistics file
 
