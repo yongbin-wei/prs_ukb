@@ -1,7 +1,16 @@
 import os
 import pandas as pd
 
+# ------- settings --------
+# filename = "daner_pgc_mdd_meta_w2_no23andMe_rmUKBB.gz"
+# filename = 'AD_sumstats_Jansenetal_2019sept.txt.gz'
+# filename = "BDvsCONT.sumstats.gz"
 filename = "sczvscont-sumstat.gz"
+
+pheno = 'scz_con'
+stat = 'or'
+# ------- settings done -------
+
 (fn, ext) = os.path.splitext(filename)
 
 filepath = "/home/yongbinw/prs_ukb/sumstats/"
@@ -14,8 +23,13 @@ else:
     os.system(cmd)
 
 # load data
-tbl = pd.read_table(filepath + fn)
-tbl_prs = tbl[['SNP','CHR','BP','A1','A2','OR','P']]
+tbl = pd.read_table(filepath + fn, sep='\t')
+print(tbl.head())
+
+if stat == 'beta':
+    tbl_prs = tbl[['SNP','CHR','BP','A1','A2','BETA','P']]
+else:
+    tbl_prs = tbl[['SNP','CHR','BP','A1','A2','OR','P']]
 print(tbl_prs.head())
 
 # write to tmp.txt
@@ -26,7 +40,7 @@ del tbl_prs
 # change SNP names (alphabetic order)
 print('Changing SNP names ...')
 fid = open('/home/yongbinw/prs_ukb/sumstats/tmp.txt', 'r')
-fod = open('/home/yongbinw/prs_ukb/sumstats/sumstats_scz_con.txt', 'w')
+fod = open('/home/yongbinw/prs_ukb/sumstats/sumstats_' + pheno + '.txt', 'w')
 
 tline = fid.readline()
 fod.write(tline)

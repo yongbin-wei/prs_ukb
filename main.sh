@@ -3,13 +3,19 @@ echo ">> Start pipeline ..."
 source scriptSettings.sh
 
 DATAPATH=/home/yongbinw/prs_ukb
-SUMSTATS=${DATAPATH}/sumstats/sumstats_scz_con.txt
 
-RELEASE="release3" # holdout release1/2/3
+PHENO_NAME="scz_con"	
+SUMSTATS=${DATAPATH}/sumstats/sumstats_${PHENO_NAME}.txt
+
+RELEASE="all" # holdout/all
 SUBJECT_FILE="subjects_${RELEASE}.txt"
 
 echo ">> Subject list file:"
 echo $SUBJECT_FILE
+
+if [ -f ${SUMSTATS}.gz ]; then
+	gunzip ${SUMSTATS}.gz
+fi
 
 ## ================ 1. edit sumstats ===================
 isEditSumstat=0
@@ -63,29 +69,50 @@ then
         	echo "${ii%.*}" >> file_list.txt
 	done
 
+	tmp_dir="$(mktemp -d)"
+	rm -r $tmp_dir
+
 	echo -e \
 "#!/bin/bash
+#SBATCH -t 24:00:00
 module load pre2019
 module load plink/1.90b6.9
-plink --bfile chunk_1 --merge-list ${CURRENTPATH}/file_list.txt --make-bed --out ${DATAPATH}/UKB_EUR_${RELEASE} --allow-no-sex
-gzip ${DATAPATH}/UKB_EUR_${RELEASE}.bed
+
+# Make tmp folder
+echo 'tmp directory is: $tmp_dir'
+mkdir $tmp_dir
+
+echo '>> Start merge ...'
+plink --bfile chunk_1 --merge-list ${CURRENTPATH}/file_list.txt --make-bed --out ${tmp_dir}/UKB_EUR_${RELEASE} --allow-no-sex
+
+echo '>> Gzip .bed ...'
+gzip  ${tmp_dir}/UKB_EUR_${RELEASE}.bed
+
+echo '>> Copy to local ...'
+rsync -P ${tmp_dir}/UKB_EUR_* ${DATAPATH}
+
+echo '>> Delete tmp_dir ...'
+rm -r ${tmp_dir}
+
+echo '>> Finishing ...'
 awk '{print \$2}' ${DATAPATH}/UKB_EUR_${RELEASE}.bim > ${DATAPATH}/UKB_EUR_${RELEASE}_snps.txt" | cat > plink_merge.sh
 
-	sbatch -t 24:00:00 ${CURRENTPATH}/plink_merge.sh
+	sbatch ${CURRENTPATH}/plink_merge.sh
 fi
 
 ## ================ 5. compute PRS ====================
-isComputePRS=1
+isComputePRS=0
+isOR=1 # 1. Odd Ratio, 0. Beta
 if (($isComputePRS==1))
 then
-	PHENO_NAME="scz_con"	
 	echo ">> Compute PRS ..."
 	sbatch run_prsice.sh -d ${DATAPATH} \
 		-t UKB_EUR_${RELEASE} \
 		-l UKB_EUR_${RELEASE} \
 		-s ${SUMSTATS} \
 		-o ${DATAPATH}/PRS_UKB_EUR_${PHENO_NAME}_${RELEASE} \
-		-P ${PHENO_NAME}
+		-P ${PHENO_NAME} \
+		-u ${isOR}
 fi
 
 echo ">> Pipeline finished"
