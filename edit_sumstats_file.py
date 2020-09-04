@@ -5,9 +5,10 @@ import pandas as pd
 # filename = "daner_pgc_mdd_meta_w2_no23andMe_rmUKBB.gz"
 # filename = 'AD_sumstats_Jansenetal_2019sept.txt.gz'
 # filename = "BDvsCONT.sumstats.gz"
-filename = "sczvscont-sumstat.gz"
-
-pheno = 'scz_con'
+# filename = "sczvscont-sumstat.gz"
+# filename = "iPSYCH-PGC_ASD_Nov2017.gz"
+filename = "adhd_jul2017.gz"
+pheno = 'adhd_con'
 stat = 'or'
 # ------- settings done -------
 

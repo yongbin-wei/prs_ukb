@@ -4,7 +4,7 @@ source scriptSettings.sh
 
 DATAPATH=/home/yongbinw/prs_ukb
 
-PHENO_NAME="scz_con"	
+PHENO_NAME="adhd_con"	
 SUMSTATS=${DATAPATH}/sumstats/sumstats_${PHENO_NAME}.txt
 
 RELEASE="all" # holdout/all
@@ -101,7 +101,7 @@ awk '{print \$2}' ${DATAPATH}/UKB_EUR_${RELEASE}.bim > ${DATAPATH}/UKB_EUR_${REL
 fi
 
 ## ================ 5. compute PRS ====================
-isComputePRS=0
+isComputePRS=1
 isOR=1 # 1. Odd Ratio, 0. Beta
 if (($isComputePRS==1))
 then

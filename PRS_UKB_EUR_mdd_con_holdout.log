@@ -1,0 +1,73 @@
+PRSice 2.2.12 (2020-02-20) 
+https://github.com/choishingwan/PRSice
+(C) 2016-2020 Shing Wan (Sam) Choi and Paul F. O'Reilly
+GNU General Public License v3
+If you use PRSice in any published work, please cite:
+Choi SW, O'Reilly PF.
+PRSice-2: Polygenic Risk Score Software for Biobank-Scale Data.
+GigaScience 8, no. 7 (July 1, 2019)
+2020-07-08 23:04:24
+/home/ctgukbio/programs/PRSice_v2.2.12/PRSice_linux \
+    --all-score  \
+    --bar-levels 0.001,0.05,0.1,0.2,0.3,0.4,0.5 \
+    --base /home/yongbinw/prs_ukb/sumstats/sumstats_mdd_con.txt \
+    --binary-target T \
+    --clump-kb 250kb \
+    --clump-p 1.000000 \
+    --clump-r2 0.100000 \
+    --interval 0.0005 \
+    --ld /scratch/tmp.F3I3tnaTpJ/UKB_EUR_holdout \
+    --lower 5e-08 \
+    --no-full  \
+    --no-regress  \
+    --num-auto 22 \
+    --or  \
+    --out /home/yongbinw/prs_ukb/PRS_UKB_EUR_mdd_con_holdout \
+    --seed 2096726100 \
+    --stat OR \
+    --target /scratch/tmp.F3I3tnaTpJ/UKB_EUR_holdout \
+    --thread 1 \
+    --upper 0.5
+
+Initializing Genotype file: 
+/scratch/tmp.F3I3tnaTpJ/UKB_EUR_holdout (bed) 
+
+Start processing sumstats_mdd_con 
+================================================== 
+
+Base file: 
+/home/yongbinw/prs_ukb/sumstats/sumstats_mdd_con.txt 
+9874289 variant(s) observed in base file, with: 
+4670953 variant(s) excluded due to p-value threshold 
+734389 ambiguous variant(s) excluded 
+4468947 total variant(s) included from base file 
+
+Loading Genotype info from target 
+================================================== 
+
+3889 people (0 male(s), 0 female(s)) observed 
+3889 founder(s) included 
+
+5876142 variant(s) not found in previous data 
+3510729 variant(s) included 
+
+Start processing reference 
+
+Initializing Genotype file: 
+/scratch/tmp.F3I3tnaTpJ/UKB_EUR_holdout (bed) 
+
+Loading Genotype info from reference 
+================================================== 
+
+3889 people (0 male(s), 0 female(s)) observed 
+3889 founder(s) included 
+
+5876142 variant(s) not found in previous data 
+3510729 variant(s) included 
+
+There are a total of 1 phenotype to process 
+
+Start performing clumping 
+
+Number of variant(s) after clumping : 254874 
+
